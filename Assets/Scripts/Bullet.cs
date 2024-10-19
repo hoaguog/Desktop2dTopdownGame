@@ -9,7 +9,7 @@ public class Bullet : MonoBehaviour
     [SerializeField]
     private float ammoSpeed = 10f;
     [SerializeField]
-    protected enum AmmoType
+    private enum AmmoType
     {
         melee, //0
         pistol, //1
@@ -48,8 +48,10 @@ public class Bullet : MonoBehaviour
             Debug.Log("enemy destroy");
         }
 
-
-        Destroy(gameObject);
+        if(other.gameObject.tag != "Bullet")
+        {
+            Destroy(gameObject);
+        }
         Debug.Log("bullet destroy");
     }
 
