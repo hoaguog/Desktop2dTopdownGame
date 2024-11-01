@@ -21,38 +21,38 @@ public class Bullet : MonoBehaviour
     private AmmoType currentAmmoType;
     public int GetAmmoType
     {
-        get { return ((int)currentAmmoType); } 
+        get { return ((int)currentAmmoType); }
     }
     public int SetAmmoType
     {
-        set { currentAmmoType = (AmmoType)value; } 
+        set { currentAmmoType = (AmmoType)value; }
     }
 
     public float getAmmoSpeed { get { return ammoSpeed; } }
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("BOT"))
         {
             Destroy(other.gameObject);
-            Debug.Log("enemy destroy");
+            //Debug.Log("enemy destroy");
         }
 
-        if(other.gameObject.tag != "Bullet")
+        if (other.gameObject.tag != "Bullet")
         {
             Destroy(gameObject);
         }
-        Debug.Log("bullet destroy");
+        //Debug.Log("bullet destroy");
     }
 
 }

@@ -536,9 +536,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 4816979648882048213, guid: b4a42d39aa7f50646b6bae0366d26d88, type: 3}
   fireRange: 0
-  typeOfWeapon: semi
+  typeOfWeapon: auto
   weaponName: 
   rateFire: 0.2
+  reloadTime: 2
+  ammoCapacity: 24
+  magazineSize: 6
+  remainingAmmo: 1000
+  recoilIntensity: 0.1
+  maxRecoil: 2
+  resetSpeed: 0.05
   weaponPosFire: {fileID: 1175549955}
 --- !u!1 &1175549954
 GameObject:

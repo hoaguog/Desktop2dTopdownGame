@@ -12,18 +12,21 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Rigidbody2D rb; //player's rigidbody2d
     [SerializeField]
-    private float moveSpeed, 
+    private float moveSpeed,
                   rotationSpeed;
     private float moveX, moveY;
     private bool walk = false,
                  readyFire = false,
-                 firing = false;
-    private float timer = 0f;
+                 firing = false,
+                 reloading = false;
+    private float speedFireTimer = 0f,
+                  reloadTimer = 0f;
+    private float heath = 100f, ammor = 100f;
 
     // Start is called before the first frame update
     void Start()
     {
-      
+
     }
 
     // Update is called once per frame
@@ -32,6 +35,7 @@ public class Player : MonoBehaviour
         FireButtonCheck();
         SpeedFireControl();
         CombatFunc();
+        Debug.Log("fire = " + firing);
     }
     private void FixedUpdate()
     {
@@ -43,12 +47,13 @@ public class Player : MonoBehaviour
         moveX = Input.GetAxisRaw("Horizontal") * moveSpeed * Time.deltaTime;
         moveY = Input.GetAxisRaw("Vertical") * moveSpeed * Time.deltaTime;
 
-        rb.velocity = new Vector2(moveX, moveY);       
+        rb.velocity = new Vector2(moveX, moveY);
 
     }
     private void WalkFunc()
     {
-        if (Input.GetButton("Walk")){
+        if (Input.GetButton("Walk"))
+        {
             walk = true;
             moveSpeed = 15f;
             MoveFunc();
@@ -74,33 +79,45 @@ public class Player : MonoBehaviour
     }
     private void CombatFunc()
     {
+        //fire buttton code
         if (wp.weaponType != "auto")
         {
-            if (Input.GetButtonDown("Fire1") && readyFire)
+            if (Input.GetButtonDown("Fire1") && readyFire && !wp.isReloading)
             {
                 wp.FireFunc();
-                Debug.Log(wp.weaponType + " semi fire mode");
+                //Debug.Log(wp.weaponType + " semi fire mode");
                 readyFire = false;
+                Debug.Log(wp.weaponPosFire.rotation);
             }
+
         }
         else
         {
-            if(readyFire == true && firing == true)
+            if (readyFire == true && firing == true && !wp.isReloading)
             {
                 wp.FireFunc();
-                Debug.Log("auto fire mode");
+                //Debug.Log("auto fire mode");
                 readyFire = false;
+                //Debug.Log("firing = " + firing);
+                Debug.Log(wp.weaponPosFire.rotation);
+
             }
+        }
+
+        //reload button code
+        if (Input.GetButtonDown("Reload"))
+        {
+            StartCoroutine(wp.ReloadFunc());
         }
     }
     private void SpeedFireControl()
     {
-            timer += Time.deltaTime;
-            if (timer > wp.weaponSpeedFire)
-            {
-                readyFire = true;
-                timer = 0f;
-            }
+        speedFireTimer += Time.deltaTime;
+        if (speedFireTimer > wp.weaponSpeedFire)
+        {
+            readyFire = true;
+            speedFireTimer = 0f;
+        }
     }
     private void FireButtonCheck()
     {
@@ -110,7 +127,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            firing = false;
+            firing = false; 
         }
     }
 }
