@@ -27,14 +27,14 @@ public class Weapon : MonoBehaviour
 
     //recoil control declare
     [SerializeField]
-    private float recoilIntensity = 0.1f,
-                  maxRecoil = 5f,
-                  resetSpeed = 0.05f;
+    private float recoilAngle = 0f,
+                  maxRecoilAngle = 2f,
+                  recoilIncrease = 0.2f;
     private float currentRecoilAngle = 0f;
-
-
+    public bool recoilReseted = false;
 
     public Transform weaponPosFire;
+    public Transform initialPosFire;
 
     public float weaponSpeedFire { get { return rateFire; } }
     public string weaponType { get { return typeOfWeapon; } }
@@ -63,7 +63,7 @@ public class Weapon : MonoBehaviour
     }
 
     //recoi logic 
-
+    
 
     public void FireFunc()
     {
@@ -71,9 +71,8 @@ public class Weapon : MonoBehaviour
         {
             GameObject bullets = (Instantiate(bulletPrefab, weaponPosFire.position, weaponPosFire.rotation));
             bullets.GetComponent<Rigidbody2D>().AddForce(weaponPosFire.up * bulletPrefab.GetComponent<Bullet>().getAmmoSpeed, ForceMode2D.Impulse);
-            //Debug.Log("ammospeed is" + bulletPrefab.GetComponent<Bullet>().getAmmoSpeed);
+            ApplyRecoil();
             remainingAmmo--;
-
         }
         else
         {
@@ -81,6 +80,23 @@ public class Weapon : MonoBehaviour
         }
 
     }
+    private void ApplyRecoil()
+    {
+        recoilAngle += recoilIncrease;
+        recoilAngle = Mathf.Min(recoilAngle, maxRecoilAngle);
+        float randomRecoil = Random.Range(-recoilAngle, recoilAngle);
+        weaponPosFire.Rotate(0, 0, randomRecoil);
+        recoilReseted = false;
+    }
+
+    public void ResetRecoil()
+    {
+        recoilAngle = 0f;
+        weaponPosFire.rotation = initialPosFire.rotation;
+        recoilReseted = true;
+    }
+
+    //reload logic
     public IEnumerator ReloadFunc()
     {
         if (ammoCapacity > 0)
@@ -107,9 +123,6 @@ public class Weapon : MonoBehaviour
         }
 
     }
-
-
-
 
 }
 

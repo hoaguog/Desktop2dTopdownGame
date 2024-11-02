@@ -35,7 +35,7 @@ public class Player : MonoBehaviour
         FireButtonCheck();
         SpeedFireControl();
         CombatFunc();
-        Debug.Log("fire = " + firing);
+        Debug.Log(wp.recoilReseted);
     }
     private void FixedUpdate()
     {
@@ -85,9 +85,7 @@ public class Player : MonoBehaviour
             if (Input.GetButtonDown("Fire1") && readyFire && !wp.isReloading)
             {
                 wp.FireFunc();
-                //Debug.Log(wp.weaponType + " semi fire mode");
                 readyFire = false;
-                Debug.Log(wp.weaponPosFire.rotation);
             }
 
         }
@@ -96,11 +94,7 @@ public class Player : MonoBehaviour
             if (readyFire == true && firing == true && !wp.isReloading)
             {
                 wp.FireFunc();
-                //Debug.Log("auto fire mode");
                 readyFire = false;
-                //Debug.Log("firing = " + firing);
-                Debug.Log(wp.weaponPosFire.rotation);
-
             }
         }
 
@@ -127,7 +121,11 @@ public class Player : MonoBehaviour
         }
         else
         {
-            firing = false; 
+            firing = false;
+            if (!wp.recoilReseted)
+            {
+                wp.ResetRecoil();
+            }
         }
     }
 }
